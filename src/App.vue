@@ -1,26 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+<circles-block
+  :arrItems = arr
+/>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import circlesBlock from "@/components/CirclesBlock";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    circlesBlock
+  },
+  data() {
+    return {
+      arr: [34,65,100,5,80],
+    };
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
