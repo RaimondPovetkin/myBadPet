@@ -17,7 +17,15 @@
       <div class="charM">+</div>
       <div class="areaS areaS2"></div>
       <div class="charM">=</div>
-      <div class="areaS areaS3"></div>
+      <div class="areaS ">
+        <svg
+            class="areaS3"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 300 300"
+            shape-rendering="geometricPrecision"
+            text-rendering="geometricPrecision">
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -118,20 +126,7 @@ export default {
 
     cutToArray(str) {
       var separator = /[a-zA-Z-),("]/;
-
-      // let replaceArr = str.replace(separator, "++,")
-      //
-      //
-      // let arrSvg = replaceArr.split("++").filter(el => {
-      //   return (el != null && el != "" && el != undefined && el != "''" && el != " ");
-      // });
-      // console.log("117---->");
-      // console.log(arrSvg);
       let resulttt = [];
-
-      // let countChar = 0;
-      // let countNum = 0;
-
       for (let i = 0; i < str.length; i++) {
         if (str[i].match(separator)) {
           if (str[i - 1]?.match(separator)) {
@@ -147,12 +142,9 @@ export default {
           }
         }
       }
-
-      console.log("***" + resulttt);
-
-
       return (resulttt);
     },
+
 
     splitToArrSvg(str) {
       let separatorСomma = /[,]/g;
@@ -162,8 +154,10 @@ export default {
       let arrSvg = replaceArr.split("++").filter(el => {
         return (el != null && el != "" && el != undefined && el != "''" && el != " ");
       });
+      console.log(arrSvg);
       return arrSvg;
     },
+
 
     getNumberOfDifferents(arr1, arr2) {
       let numbersOfDifference = [];
@@ -179,59 +173,37 @@ export default {
       return numbersOfDifference;
     },
 
-    split() {
 
-      console.log("-----");
+    mergeArr(arr1, arr2) {
+      let result = [];
+      var separator555 = /[0-9.]/;
+      for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i].match(separator555) && arr2[i].match(separator555)) {
+          result.push((((Number(arr1[i])*(100 - this.value1)) + Number(arr2[i])*(this.value1)) / 100));
+        } else {
+          result.push(arr1[i]);
+          continue;
+        }
+      }
+      return result;
+    },
+
+
+    split() {
       let arrSvg1 = this.splitToArrSvg(this.number1);
       let arrSvg2 = this.splitToArrSvg(this.number2);
-      console.log(arrSvg1);
-      console.log(arrSvg2);
-      console.log("-----");
-
-      // var separator228 = /[-]/;
-
-
       let numbersOfDifference = this.getNumberOfDifferents(arrSvg1, arrSvg2);
-
-
-      console.log(numbersOfDifference);
-
       for (let i of numbersOfDifference) {
+        console.log("--------------");
         console.log(arrSvg1[i]);
         console.log(arrSvg2[i]);
-        console.log(this.cutToArray(arrSvg1[i]));
-        console.log(this.cutToArray(arrSvg2[i]));
-        console.log(mergeArr((this.cutToArray(arrSvg1[i])), (this.cutToArray(arrSvg2[i]))).join(""), this.value1);
-        console.log("-----------------");
-        arrSvg1[i] = mergeArr((this.cutToArray(arrSvg1[i])), (this.cutToArray(arrSvg2[i])), this.value1).join("");
+
+        arrSvg1[i] = this.mergeArr((this.cutToArray(arrSvg1[i])), (this.cutToArray(arrSvg2[i]))).join("");
+        console.log(arrSvg1[i]);
+        console.log("--------------");
       }
-
-
-      function mergeArr(arr1, arr2, val) {
-        let result = [];
-        var separator555 = /[0-9.]/;
-        for (let i = 0; i < arr1.length; i++) {
-          if (arr1[i].match(separator555) && arr2[i].match(separator555)) {
-            result.push((((Number(arr1[i])*(100 - val)) + Number(arr2[i])*(val)) / 100));
-          } else {
-            result.push(arr1[i]);
-            continue;
-          }
-        }
-        return result;
-      }
-
-      console.log(mergeArr(["30.49621", "г"], ["10.49621", "л"]));
-
-      console.log(arrSvg1.join(""));
-      this.number3 = arrSvg1.join("");
-
-      // var string = "abcdea-bcde";
-      // var newstringreplaced = string.replace(separator228, "++-");
-      // var newstring = newstringreplaced.split("++");
-      //
-      // console.log(newstring);
-
+      console.log(arrSvg1);
+      this.number3 = arrSvg1.join(" ");
     }
   }
 };
