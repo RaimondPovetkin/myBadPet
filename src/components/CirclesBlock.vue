@@ -1,8 +1,30 @@
 <template>
-  <textarea class="textarea" v-model="number1"></textarea>
-  <textarea class="textarea" v-model="number2"></textarea>
-  <button @click="split">GO!</button>
-  <textarea class="textarea" v-model="number3"></textarea>
+  
+  <div class="top-panel">
+    <div class="areas">
+      <textarea class="textarea" v-model="number1"></textarea>
+      <textarea class="textarea" v-model="number2"></textarea>
+      <button @click="split">GO!</button>
+      <textarea class="textarea" v-model="number3"></textarea>
+    </div>
+    <div class="variants">
+
+      <div v-for="(item,index) in getFaces" :key="item">
+        <div
+            class="face1 variant"
+        >
+          <svg
+              :class="'f'+index"
+              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 300 300"
+              shape-rendering="geometricPrecision"
+              text-rendering="geometricPrecision">
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
   <div class="slider-demo-block">
     <span class="demonstration">Default value</span>
@@ -26,9 +48,21 @@
             text-rendering="geometricPrecision">
         </svg>
       </div>
+      <div class="areaS ">
+        <svg
+            class="areaS4"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 300 300"
+            shape-rendering="geometricPrecision"
+            text-rendering="geometricPrecision">
+        </svg>
+      </div>
     </div>
   </div>
-
+  <div class="slider-demo-block">
+    <span class="demonstration">Default value</span>
+    <el-slider v-model="value2"/>
+  </div>
 
 
   <div class="demo-progress">
@@ -59,8 +93,10 @@
 
 <script>
 import animatedNumber from "@/components/AnimatedNumber";
+import {mapGetters} from "vuex";
 
 export default {
+  computed: mapGetters(["getFaces"]),
   components: {
     animatedNumber
   },
@@ -74,7 +110,8 @@ export default {
       number2: null,
       number: 0,
       number3: null,
-      value1: 10,
+      value1: 50,
+      value2: 50,
       someArr: [],
       colors: [
         {color: "#f56c6c", percentage: 20},
@@ -87,6 +124,13 @@ export default {
   },
 
   mounted() {
+
+    for (let i = 0; i < this.getFaces.length; i++) {
+      let shapee = this.split(this.getFaces[i].min,this.getFaces[i].max)
+      this.mountSvg(shapee, "f"+i)
+    }
+
+
 
 
     for (let i = 0; i < this.arrItems.length; i++) {
@@ -107,7 +151,10 @@ export default {
   },
   watch: {
     value1() {
-      this.split();
+      for (let i = 0; i < this.getFaces.length; i++) {
+        let shapee = this.split(this.getFaces[i].min,this.getFaces[i].max)
+        this.mountSvg(shapee, "f"+i)
+      }
     },
     number1() {
       let elem = document.querySelector(".areaS1")
@@ -189,9 +236,12 @@ export default {
     },
 
 
-    split() {
-      let arrSvg1 = this.splitToArrSvg(this.number1);
-      let arrSvg2 = this.splitToArrSvg(this.number2);
+    split(shape1, shape2) {
+      if(!shape1 || !shape2){
+        return
+      }
+      let arrSvg1 = this.splitToArrSvg(shape1);
+      let arrSvg2 = this.splitToArrSvg(shape2);
       let numbersOfDifference = this.getNumberOfDifferents(arrSvg1, arrSvg2);
       for (let i of numbersOfDifference) {
         console.log("--------------");
@@ -203,7 +253,11 @@ export default {
         console.log("--------------");
       }
       console.log(arrSvg1);
-      this.number3 = arrSvg1.join(" ");
+      return arrSvg1.join(" ")
+    },
+    mountSvg(shape, mountId){
+      let elem = document.querySelector('.'+mountId)
+      elem.innerHTML = shape;
     }
   }
 };
@@ -216,7 +270,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   height: 300px;
-  width: 800px;
+  width: 1000px;
   /*border: 1px solid black;*/
   /*border-radius: 3px;*/
 
@@ -252,5 +306,19 @@ export default {
 
 .demo-progress .el-progress--circle {
   margin-right: 15px;
+}
+.top-panel{
+  display: flex;
+}
+.variant{
+  width: 100px;
+  height: 100px;
+  background-color: #dac0c0;
+  margin: 20px;
+}
+.variants{
+  display: flex;
+  background-color: #c0c4da;
+  width: 600px;
 }
 </style>
